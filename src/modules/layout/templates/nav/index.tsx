@@ -12,34 +12,55 @@ export default async function Nav() {
     <div className="sticky top-0 inset-x-0 z-50 group">
       <header className="relative h-16 mx-auto border-b duration-200 bg-white border-ui-border-base">
         <nav className="content-container txt-xsmall-plus text-ui-fg-subtle flex items-center justify-between w-full h-full text-small-regular">
-          <div className="flex-1 basis-0 h-full flex items-center">
-            <div className="h-full">
-              <SideMenu regions={regions} />
-            </div>
-          </div>
-
           <div className="flex items-center h-full">
             <LocalizedClientLink
               href="/"
               className="txt-compact-xlarge-plus hover:text-ui-fg-base uppercase"
               data-testid="nav-store-link"
             >
-              Medusa Store
+              <picture>
+                <img alt="Logo" src="/naclogo.svg"></img>
+              </picture>
             </LocalizedClientLink>
           </div>
 
-          <div className="flex items-center gap-x-6 h-full flex-1 basis-0 justify-end">
-            <div className="hidden small:flex items-center gap-x-6 h-full">
-              {process.env.FEATURE_SEARCH_ENABLED && (
-                <LocalizedClientLink
-                  className="hover:text-ui-fg-base"
-                  href="/search"
-                  scroll={false}
-                  data-testid="nav-search-link"
-                >
-                  Search
-                </LocalizedClientLink>
-              )}
+          <div className="flex-1 flex justify-center">
+            {process.env.FEATURE_SEARCH_ENABLED && (
+              <LocalizedClientLink
+                href="/search"
+                scroll={false}
+                data-testid="nav-search-link"
+                className="relative flex items-center w-full max-w-md"
+              >
+                <input
+                  type="text"
+                  placeholder="Search products..."
+                  className="w-full py-2 px-4 pr-10 rounded-full bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                  readOnly
+                />
+                <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-5 w-5 text-gray-400"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                    />
+                  </svg>
+                </div>
+              </LocalizedClientLink>
+            )}
+          </div>
+
+          {/* Account, Cart, and SideMenu moved to the right */}
+          <div className="flex items-center gap-x-6 h-full">
+            <div className="flex items-center gap-x-6 h-full">
               <LocalizedClientLink
                 className="hover:text-ui-fg-base"
                 href="/account"
@@ -61,6 +82,9 @@ export default async function Nav() {
             >
               <CartButton />
             </Suspense>
+            <div className="h-full">
+              <SideMenu regions={regions} />
+            </div>
           </div>
         </nav>
       </header>
