@@ -4,30 +4,45 @@ import { getCategoriesList, getCollectionsList } from "@lib/data"
 
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
 import MedusaCTA from "@modules/layout/components/medusa-cta"
+import Link from "next/link"
+import { FacebookIcon, InstagramIcon, TwitterIcon } from "lucide-react"
 
 export default async function Footer() {
   const { collections } = await getCollectionsList(0, 6)
   const { product_categories } = await getCategoriesList(0, 6)
 
   return (
-    <footer className="border-t border-ui-border-base w-full">
+    <footer className="border-t border-ui-border-base bg-header w-full ">
       <div className="content-container flex flex-col w-full">
-        <div className="flex flex-col gap-y-6 xsmall:flex-row items-start justify-between py-40">
+        <div className="flex flex-col gap-y-6 xsmall:flex-row items-start justify-around py-40">
           <div>
             <LocalizedClientLink
               href="/"
               className="txt-compact-xlarge-plus text-ui-fg-subtle hover:text-ui-fg-base uppercase"
             >
-              Medusa Store
+              Nacaram Store
             </LocalizedClientLink>
+            <div className="home-div border-t lg:text-left">
+              {/* <FooterLink href="/">HOME</FooterLink> */}
+              <FooterLink href="/about">ABOUT</FooterLink>
+              <FooterLink href="/contact">CONTACT</FooterLink>
+            </div>
           </div>
-          <div className="text-small-regular gap-10 md:gap-x-16 grid grid-cols-2 sm:grid-cols-3">
+          <div>
+            <span className="txt-large-plus txt-ui-fg-base">Policies</span>
+            <FooterLink href="/shipping">SHIPPING & RETURNS</FooterLink>
+            <FooterLink href="/privacy">PRIVACY POLICY</FooterLink>
+          </div>
+          <div className="text-small-regular">
             {product_categories && product_categories?.length > 0 && (
               <div className="flex flex-col gap-y-2">
-                <span className="txt-small-plus txt-ui-fg-base">
+                <span className="txt-large-plus txt-ui-fg-base">
                   Categories
                 </span>
-                <ul className="grid grid-cols-1 gap-2" data-testid="footer-categories">
+                <ul
+                  className="grid grid-cols-1 gap-2"
+                  data-testid="footer-categories"
+                >
                   {product_categories?.slice(0, 6).map((c) => {
                     if (c.parent_category) {
                       return
@@ -103,7 +118,7 @@ export default async function Footer() {
                 </ul>
               </div>
             )}
-            <div className="flex flex-col gap-y-2">
+            {/* <div className="flex flex-col gap-y-2">
               <span className="txt-small-plus txt-ui-fg-base">Medusa</span>
               <ul className="grid grid-cols-1 gap-y-2 text-ui-fg-subtle txt-small">
                 <li>
@@ -137,16 +152,44 @@ export default async function Footer() {
                   </a>
                 </li>
               </ul>
-            </div>
+            </div> */}
           </div>
         </div>
-        <div className="flex w-full mb-16 justify-between text-ui-fg-muted">
+
+        <div className="flex flex-col w-full mb-16 justify-between items-center gap-2  text-ui-fg-muted">
+          <div className="flex gap-4">
+            <FooterLink href="#">
+              <FacebookIcon />
+            </FooterLink>
+            <FooterLink href="#">
+              <InstagramIcon />
+            </FooterLink>
+            <FooterLink href="#">
+              <TwitterIcon />
+            </FooterLink>
+          </div>
           <Text className="txt-compact-small">
-            © {new Date().getFullYear()} Medusa Store. All rights reserved.
+            © {new Date().getFullYear()} Nacaram. All rights reserved.
           </Text>
-          <MedusaCTA />
+          {/* <MedusaCTA /> */}
         </div>
       </div>
     </footer>
+  )
+}
+
+const FooterLink = ({
+  href,
+  className,
+  children,
+}: {
+  href: string
+  className?: string
+  children: React.ReactNode
+}) => {
+  return (
+    <Link href={href} className="text-ui-fg-subtle hover:text-ui-fg-base">
+      <p className="underline-offset-4 hover:underline">{children}</p>
+    </Link>
   )
 }

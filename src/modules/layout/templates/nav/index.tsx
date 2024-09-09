@@ -4,22 +4,23 @@ import { listRegions } from "@lib/data"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
 import CartButton from "@modules/layout/components/cart-button"
 import SideMenu from "@modules/layout/components/side-menu"
+import { ShoppingCartIcon, UserIcon } from "lucide-react"
 
 export default async function Nav() {
   const regions = await listRegions().then((regions) => regions)
 
   return (
     <div className="sticky top-0 inset-x-0 z-50 group">
-      <header className="relative h-16 mx-auto border-b duration-200 bg-white border-ui-border-base">
+      <header className="relative h-16 mx-auto border-b duration-200 bg-header border-ui-border-base">
         <nav className="content-container txt-xsmall-plus text-ui-fg-subtle flex items-center justify-between w-full h-full text-small-regular">
-          <div className="flex items-center h-full">
+          <div className="hidden xsmall:flex items-center h-full">
             <LocalizedClientLink
               href="/"
               className="txt-compact-xlarge-plus hover:text-ui-fg-base uppercase"
               data-testid="nav-store-link"
             >
               <picture>
-                <img alt="Logo" src="/naclogo.svg"></img>
+                <img alt="Nacaram" src="/logo_alt1.png"></img>
               </picture>
             </LocalizedClientLink>
           </div>
@@ -59,30 +60,32 @@ export default async function Nav() {
           </div>
 
           {/* Account, Cart, and SideMenu moved to the right */}
-          <div className="flex items-center gap-x-6 h-full">
-            <div className="flex items-center gap-x-6 h-full">
+          <div className="flex items-center gap-x-4 xsmall:gap-x-6 h-full ml-1">
+            <div className="flex items-center gap-x-6 h-full underline-offset-4 hover:underline">
               <LocalizedClientLink
-                className="hover:text-ui-fg-base"
+                className="hover:text-ui-fg-base inline-flex items-center"
                 href="/account"
                 data-testid="nav-account-link"
               >
-                Account
+                <span className="hidden xsmall:block">Account</span>
+                <UserIcon className="ml-1 h-4 w-4" />
               </LocalizedClientLink>
             </div>
             <Suspense
               fallback={
                 <LocalizedClientLink
-                  className="hover:text-ui-fg-base flex gap-2"
+                  className="hover:text-ui-fg-base flex gap-2 items-center"
                   href="/cart"
                   data-testid="nav-cart-link"
                 >
-                  Cart (0)
+                  <span className="hidden xsmall:block">Cart (0)</span>
+                  <ShoppingCartIcon className="ml-1 h-4 w-4" />
                 </LocalizedClientLink>
               }
             >
               <CartButton />
             </Suspense>
-            <div className="h-full">
+            <div className="h-full underline-offset-4 hover:underline">
               <SideMenu regions={regions} />
             </div>
           </div>

@@ -1,69 +1,23 @@
-import { Product } from "@medusajs/medusa"
-import { getCollectionsList, getProductsList, getRegion } from "@lib/data"
-import FeaturedProducts from "@modules/home/components/featured-products"
-import { ProductCollectionWithPreviews } from "types/global"
-import { cache } from "react"
+import MustHaves from "@modules/port/home/MustHaves"
+import MaxWidthWrapper from "@modules/ui/MaxWidthWrapper"
+import HomeFeatured from "@modules/port/home/HomeFeatured"
+import HomeCollection from "@modules/port/home/HomeCollection"
+import AboutCraftmanship from "@modules/port/home/AboutCraftmanship"
+import HomeSideNav from "@modules/layout/components/home-sidenav"
 
-const getCollectionsWithProducts = cache(
-  async (
-    countryCode: string
-  ): Promise<ProductCollectionWithPreviews[] | null> => {
-    const { collections } = await getCollectionsList(0, 3)
-
-    if (!collections) {
-      return null
-    }
-
-    const collectionIds = collections.map((collection) => collection.id)
-
-    await Promise.all(
-      collectionIds.map((id) =>
-        getProductsList({
-          queryParams: { collection_id: [id] },
-          countryCode,
-        })
-      )
-    ).then((responses) =>
-      responses.forEach(({ response, queryParams }) => {
-        let collection
-
-        if (collections) {
-          collection = collections.find(
-            (collection) => collection.id === queryParams?.collection_id?.[0]
-          )
-        }
-
-        if (!collection) {
-          return
-        }
-
-        collection.products = response.products as unknown as Product[]
-      })
-    )
-
-    return collections as unknown as ProductCollectionWithPreviews[]
-  }
-)
-
-export default async function Home({
-  params: { countryCode },
-}: {
-  params: { countryCode: string }
-}) {
-  const collections = await getCollectionsWithProducts(countryCode)
-  const region = await getRegion(countryCode)
-
-  if (!collections || !region) {
-    return null
-  }
-
+export default async function Home() {
   return (
     <>
-      <div className="py-12">
-        <ul className="flex flex-col gap-x-6">
+      <HomeSideNav />
+      <MaxWidthWrapper className="xsmall:py-12">
+        <MustHaves id="must-haves" />
+        <HomeFeatured id="featured" />
+        <HomeCollection id="collection" />
+        <AboutCraftmanship id="about" />
+        {/* <ul className="flex flex-col gap-x-6">
           <FeaturedProducts collections={collections} region={region} />
-        </ul>
-      </div>
+        </ul> */}
+      </MaxWidthWrapper>
     </>
   )
 }
